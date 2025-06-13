@@ -1,0 +1,9 @@
+{
+  "plugins": {
+    "cordova": {},
+    "capacitor": {
+      "iosPath": "ios",
+      "androidPath": "android"
+    }
+  }
+}
