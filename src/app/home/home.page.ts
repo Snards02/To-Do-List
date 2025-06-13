@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Category, StorageService, Task } from '../services/storage.service';
+import { FirebaseConfigService } from '../services/firebase-config.service';
 
 @Component({
   selector: 'app-home',
@@ -15,14 +16,18 @@ export class HomePage implements OnInit {
   selectedCategoryId: number | null = null;
   taskCategoryId: number | null = null;
   filteredTasks: Task[] = [];
+  showCategories = true;
 
-  constructor(private storageService: StorageService) {}
+  constructor(private storageService: StorageService, private firebaseConfigService: FirebaseConfigService) {}
 
   async ngOnInit() {
+   await this.firebaseConfigService.init();
+    this.showCategories = this.firebaseConfigService.isCategoriesEnabled();
+
     this.tasks = await this.storageService.getTasks();
     this.categories = await this.storageService.getCategories();
     this.filterTasks();
-    
+  
   }
 
   async addTask() {
@@ -40,7 +45,7 @@ export class HomePage implements OnInit {
 
   this.newTask = '';
   this.taskCategoryId = null;
-  this.filterTasks(); // ✅ Actualiza la vista
+  this.filterTasks(); // Actualiza la vista
 }
 
   async toggleComplete(task: Task) {
@@ -51,7 +56,7 @@ export class HomePage implements OnInit {
   async deleteTask(task: Task) {
   this.tasks = this.tasks.filter(t => t.id !== task.id);
   await this.storageService.saveTasks(this.tasks);
-  this.filterTasks(); // ✅ Actualiza la vista
+  this.filterTasks(); //  Actualiza la vista
 }
 
   filterTasks() {
