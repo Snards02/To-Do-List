@@ -1,24 +1,87 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>To-Do List</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>📝 To-Do List</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-item>
-    <ion-input [(ngModel)]="newTask" placeholder="Nueva tarea"></ion-input>
-    <ion-button (click)="addTask()" expand="block">Agregar</ion-button>
-  </ion-item>
+  <!-- Gestión de Categorías -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Agregar categorías</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-input [(ngModel)]="newCategoryName" placeholder="Nueva categoría"></ion-input>
+        <ion-button (click)="addCategory()">Agregar</ion-button>
+      </ion-item>
+      <ion-list>
+        <ion-item *ngFor="let cat of categories">
+          <ion-label>{{ cat.name }}</ion-label>
+          <ion-button fill="clear" color="danger" (click)="deleteCategory(cat)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 
-  <ion-list>
-    <ion-item *ngFor="let task of tasks">
-      <ion-checkbox slot="start" [(ngModel)]="task.completed" (ionChange)="toggleComplete(task)"></ion-checkbox>
-      <ion-label [style.text-decoration]="task.completed ? 'line-through' : 'none'">
-        {{ task.title }}
-      </ion-label>
-      <ion-button color="danger" fill="clear" slot="end" (click)="deleteTask(task)">
-        <ion-icon name="trash"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-list>
+  <!-- Agregar Tarea -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Agregar tarea</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-input [(ngModel)]="newTask" placeholder="Nueva tarea"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Asignar a categoría</ion-label>
+        <ion-select [(ngModel)]="taskCategoryId" placeholder="Sin categoría">
+          <ion-select-option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-button expand="block" (click)="addTask()">Agregar</ion-button>
+    </ion-card-content>
+  </ion-card>
+  <!-- Filtro de Categorías -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Filtrar  tareas por categoría</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-label>Categoría</ion-label>
+        <ion-select [(ngModel)]="selectedCategoryId" placeholder="Todas" (ionChange)="filterTasks()">
+          <ion-select-option [value]="null">Todas</ion-select-option>
+          <ion-select-option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  
+
+  <!-- Lista de Tareas -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Lista de tareas</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let task of filteredTasks">
+          <ion-checkbox slot="start" [(ngModel)]="task.completed" (ionChange)="toggleComplete(task)"></ion-checkbox>
+          <ion-label class="task-label" [class.completed]="task.completed">
+            {{ task.title }}
+          </ion-label>
+          <ion-button fill="clear" color="danger" slot="end" (click)="deleteTask(task)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  
+
 </ion-content>

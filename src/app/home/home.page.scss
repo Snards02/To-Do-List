@@ -25,3 +25,24 @@
 #container a {
   text-decoration: none;
 }
+.task-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.task-label.completed {
+  text-decoration: line-through;
+  color: #ffffff;
+}
+
+ion-card {
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+ion-button {
+  --border-radius: 12px;
+}
+
